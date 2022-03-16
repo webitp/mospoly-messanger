@@ -21,7 +21,6 @@ SOURCES += \
     client.cpp \
     engine.cpp \
     main.cpp \
-        main.cpp \
     server.cpp \
     serverfunctions.cpp
 

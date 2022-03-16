@@ -45,7 +45,6 @@ void Server::slotSocketStateChanged(QAbstractSocket::SocketState socketState) {
 
 void Server::slotServerRead(){
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-
     while (sender->canReadLine())
     {
         // в клиенте будет содержаться текущий юзер, если он авторизован
