@@ -1,10 +1,13 @@
+
 #include "server.h"
+#include "database.h"
 #include "serverfunctions.h"
+
 #include <sstream>
 #include <QDebug>
 #include <QCoreApplication>
 #include <QAbstractSocket>
-#include "database.h"
+
 
 Server::~Server()
 {
@@ -22,7 +25,7 @@ Server::Server(QObject *parent) : QObject(parent){
         qDebug() << "server is started";
     }
 
-    Database::getInstance();
+    Database1::getInstance();
 }
 
 void Server::slotNewConnection(){

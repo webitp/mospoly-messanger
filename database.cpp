@@ -1,8 +1,11 @@
 #include "database.h"
 
-Database::Database()
+Database1* Database1::p_instance = nullptr;
+DatabaseDestroyer1 Database1::destroyer;
+
+Database1::Database1()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName(DB_HOST);
     db.setDatabaseName(DB_NAME);
     db.setUserName(DB_USER);
@@ -13,3 +16,14 @@ Database::Database()
     else
         throw "[DB] Database connection refused!";
 }
+
+Database1* Database1::getInstance()
+{
+    if (!p_instance)
+    {
+        p_instance = new Database1();
+        destroyer.initialize(p_instance);
+    }
+    return p_instance;
+}
+
