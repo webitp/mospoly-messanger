@@ -25,7 +25,7 @@ Server::Server(QObject *parent) : QObject(parent){
         qDebug() << "server is started";
     }
 
-    Database1::getInstance();
+    DataBase::getInstance();
 }
 
 void Server::slotNewConnection(){

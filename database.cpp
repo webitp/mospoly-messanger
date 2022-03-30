@@ -1,27 +1,28 @@
 #include "database.h"
 
-Database1* Database1::p_instance = nullptr;
-DatabaseDestroyer1 Database1::destroyer;
+DataBase* DataBase::p_instance = nullptr;
+DatabaseDestroyer DataBase::destroyer;
 
-Database1::Database1()
+DataBase::DataBase()
 {
-    db = QSqlDatabase::addDatabase("QMYSQL");
+    db = QSqlDatabase::addDatabase("QPSQL");
     db.setHostName(DB_HOST);
     db.setDatabaseName(DB_NAME);
     db.setUserName(DB_USER);
     db.setPassword(DB_PASSWORD);
+    db.setPort(DB_PORT);
 
     if (db.open())
         qDebug() << "[DB] Database connected!";
     else
-        throw "[DB] Database connection refused!";
+        qDebug() << "[DB] Database connection refused!";
 }
 
-Database1* Database1::getInstance()
+DataBase* DataBase::getInstance()
 {
     if (!p_instance)
     {
-        p_instance = new Database1();
+        p_instance = new DataBase();
         destroyer.initialize(p_instance);
     }
     return p_instance;

@@ -2,35 +2,37 @@
 #define DATABASE_H
 
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QString>
 #include <QDebug>
 
-class DatabaseDestroyer1;
+class DatabaseDestroyer;
 
-class Database1
+class DataBase
 {
 public:
-    friend class DatabaseDestroyer1;
+    friend class DatabaseDestroyer;
 private:
-    static Database1* p_instance;
-    static DatabaseDestroyer1 destroyer;
+    static DataBase* p_instance;
+    static DatabaseDestroyer destroyer;
 
-    const QString DB_HOST = "localhost";
-    const QString DB_NAME = "mospoly_messanger";
-    const QString DB_USER = "root";
-    const QString DB_PASSWORD = "";
+    const QString DB_HOST = "127.0.0.1";
+    const QString DB_NAME = "postgres";
+    const QString DB_USER = "postgres";
+    const QString DB_PASSWORD = "postgres";
+    const int DB_PORT = 5432;
 
     QSqlDatabase db;
     static int qwe;
 protected:
-    Database1();
-    Database1(const Database1&) = delete;
-    Database1& operator = (Database1 &) = delete;
-    ~Database1(){};
+    DataBase();
+    DataBase(const DataBase&) = delete;
+    DataBase& operator = (DataBase &) = delete;
+    ~DataBase(){};
 
 
 public:
-    static Database1* getInstance();
+    static DataBase* getInstance();
    /* {
         if (p_instance==nullptr)
         {
@@ -41,14 +43,14 @@ public:
     }*/
 };
 
-class DatabaseDestroyer1
+class DatabaseDestroyer
 {
     private:
-        Database1* p_instance1=nullptr;
+        DataBase* p_instance=nullptr;
     public:
-        DatabaseDestroyer1(){};
-        ~DatabaseDestroyer1(){if(p_instance1 != nullptr) delete p_instance1;};
-        void initialize(Database1 * p){ p_instance1 = p; }
+        DatabaseDestroyer(){};
+        ~DatabaseDestroyer(){if(p_instance != nullptr) delete p_instance;};
+        void initialize(DataBase * p){ p_instance = p; }
 };
 
 #endif // DATABASE_H
