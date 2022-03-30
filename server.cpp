@@ -4,6 +4,7 @@
 #include "serverfunctions.h"
 
 #include <sstream>
+#include <QSqlQuery>
 #include <QDebug>
 #include <QCoreApplication>
 #include <QAbstractSocket>
@@ -24,8 +25,6 @@ Server::Server(QObject *parent) : QObject(parent){
     } else {
         qDebug() << "server is started";
     }
-
-    DataBase::getInstance();
 }
 
 void Server::slotNewConnection(){

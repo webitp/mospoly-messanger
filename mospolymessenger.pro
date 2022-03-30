@@ -31,9 +31,6 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix:LIBS += -lpq
-win32:LIBS += libpqdll.lib
-
 HEADERS += \
     client.h \
     database.h \

@@ -3,6 +3,7 @@
 
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QString>
 #include <QDebug>
 
@@ -33,14 +34,8 @@ protected:
 
 public:
     static DataBase* getInstance();
-   /* {
-        if (p_instance==nullptr)
-        {
-            p_instance = new Database1();
-            //destroyer.initialize(p_instance);
-        }
-        return p_instance;
-    }*/
+
+    static QSqlQuery query();
 };
 
 class DatabaseDestroyer

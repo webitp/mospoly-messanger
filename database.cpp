@@ -13,9 +13,14 @@ DataBase::DataBase()
     db.setPort(DB_PORT);
 
     if (db.open())
+    {
         qDebug() << "[DB] Database connected!";
+    }
     else
+    {
         qDebug() << "[DB] Database connection refused!";
+        qDebug() << db.lastError().text();
+    }
 }
 
 DataBase* DataBase::getInstance()
@@ -26,4 +31,11 @@ DataBase* DataBase::getInstance()
         destroyer.initialize(p_instance);
     }
     return p_instance;
+}
+
+QSqlQuery DataBase::query()
+{
+    getInstance();
+    QSqlQuery query;
+    return query;
 }
