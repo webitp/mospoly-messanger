@@ -27,4 +27,3 @@ DataBase* DataBase::getInstance()
     }
     return p_instance;
 }
-

@@ -17,7 +17,7 @@ private:
     static DatabaseDestroyer destroyer;
 
     const QString DB_HOST = "127.0.0.1";
-    const QString DB_NAME = "postgres";
+    const QString DB_NAME = "mospoly_messanger";
     const QString DB_USER = "postgres";
     const QString DB_PASSWORD = "postgres";
     const int DB_PORT = 5432;
