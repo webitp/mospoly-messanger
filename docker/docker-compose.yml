@@ -15,5 +15,4 @@ services:
       - "33333:33333"
     volumes:
       - ../server:/usr/share/server
-    command: "qmake mospolymessenger.pro && make && ./mospolymessenger"
-    entrypoint: ./mospolymessenger
+    entrypoint: ./run.sh
