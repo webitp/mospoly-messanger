@@ -31,3 +31,8 @@
 *.out
 *.app
 *.pro.user
+
+moc_predefs.h
+moc_server.cpp
+Makefile
+.qmake.stash
