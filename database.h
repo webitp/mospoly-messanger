@@ -32,6 +32,7 @@ protected:
     ~DataBase(){};
 
 
+
 public:
     static DataBase* getInstance();
 
