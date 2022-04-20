@@ -4,6 +4,6 @@
 
 namespace ServerFunctions {
     QString parse(QString query);
-    QString auth(QString login, QString password);
-    QString reg(QString login, QString password);
+    QString auth(QStringList auth_list);
+    QString reg(QStringList reg_list);
 }

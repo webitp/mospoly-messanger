@@ -1,6 +1,10 @@
+
 #include "server.h"
+#include "database.h"
 #include "serverfunctions.h"
+
 #include <sstream>
+#include <QSqlQuery>
 #include <QDebug>
 #include <QCoreApplication>
 #include <QAbstractSocket>
@@ -21,6 +25,7 @@ Server::Server(QObject *parent) : QObject(parent){
     } else {
         qDebug() << "server is started";
     }
+    DataBase::getInstance();
 }
 
 void Server::slotNewConnection(){
@@ -45,6 +50,7 @@ void Server::slotSocketStateChanged(QAbstractSocket::SocketState socketState) {
 
 void Server::slotServerRead(){
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
+
     while (sender->canReadLine())
     {
         // в клиенте будет содержаться текущий юзер, если он авторизован
