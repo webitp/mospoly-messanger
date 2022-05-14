@@ -9,18 +9,17 @@
 QString ServerFunctions::auth(QStringList auth_list){
     DataBase::getInstance();
     QSqlQuery query_auth = DataBase::query();
-    query_auth.prepare("select * from public.users where password= :password and phone= :phone and username= :username");
+    query_auth.prepare("select * from public.users where password= :password and username= :username order by id desc limit 1");
     query_auth.bindValue(":username", auth_list.at(0));
     query_auth.bindValue(":password", auth_list.at(1));
-    query_auth.bindValue(":phone", auth_list.at(2));
     query_auth.exec();
-    if(query_auth.isNull(false)){
+    QSqlRecord rec = query_auth.record();
+
+    if(rec.isEmpty()){
         return "there are no user with those parametrs";
     }else{
         return "auth success";
-    }
-
-
+    };
 }
 
 QString ServerFunctions::reg(QStringList reg_list){
