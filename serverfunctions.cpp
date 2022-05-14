@@ -3,10 +3,11 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlRecord>
 
 
 QString ServerFunctions::auth(QStringList auth_list){
-   /* DataBase::getInstance();
+    DataBase::getInstance();
     QSqlQuery query_auth = DataBase::query();
     query_auth.prepare("select * from public.users where password= :password and phone= :phone and username= :username");
     query_auth.bindValue(":username", auth_list.at(0));
@@ -15,22 +16,32 @@ QString ServerFunctions::auth(QStringList auth_list){
     query_auth.exec();
     if(query_auth.isNull(false)){
         return "there are no user with those parametrs";
-    }else{ */
+    }else{
         return "auth success";
-  //  }
+    }
 
 
 }
 
 QString ServerFunctions::reg(QStringList reg_list){
-   /* DataBase::getInstance();
+    DataBase::getInstance();
     QSqlQuery query_reg = DataBase::query();
     query_reg.prepare("insert into public.users(password, phone, username, online) values (:pass, :phone, :name, :online)");
     query_reg.bindValue(":name", reg_list.at(0));
     query_reg.bindValue(":pass", reg_list.at(1));
     query_reg.bindValue(":phone", reg_list.at(2));
     query_reg.bindValue(":online", "true");
-    query_reg.exec(); */
+    query_reg.exec();
+
+    query_reg.exec("select * from public.users order by id desc limit 1");
+    QSqlRecord rec = query_reg.record();
+    const int username_Index = rec.indexOf("username");
+    const int password_Index = rec.indexOf("password");
+
+    while(query_reg.next())
+        qDebug()<<query_reg.value(username_Index).toString()
+               <<"\t"<<query_reg.value(password_Index).toString()<<"\n";
+
     return "register success";
 }
 
