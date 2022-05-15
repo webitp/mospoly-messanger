@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlRecord>
+#include <QDateTime>
 
 
 QString ServerFunctions::auth(QStringList auth_list){
@@ -13,12 +14,27 @@ QString ServerFunctions::auth(QStringList auth_list){
     query_auth.bindValue(":username", auth_list.at(0));
     query_auth.bindValue(":password", auth_list.at(1));
     query_auth.exec();
-    QSqlRecord rec = query_auth.record();
+    query_auth.first();
+    QSqlRecord rec1 = query_auth.record();
 
-    if(rec.isEmpty()){
+
+    if(!query_auth.isValid()){
         return "there are no user with those parametrs";
     }else{
-        return "auth success";
+        const int id_Index = rec1.indexOf("id");
+        int id = query_auth.value(id_Index).toInt();
+        qint64 create_time = QDateTime::currentSecsSinceEpoch();
+        QDateTime create_date = QDateTime::currentDateTime();
+        QDateTime expired_date = create_date.addYears(1);
+        size_t token = qHash(create_time);
+        QString token_16 = QString::number(token, 16);
+        query_auth.prepare("insert into public.user_tokens(user_id, token, expired_at) values (:user_id, :token, :expired_at)");
+        query_auth.bindValue(":user_id", id);
+        query_auth.bindValue(":token", token_16);
+        query_auth.bindValue(":expired_at", expired_date);
+        query_auth.exec();
+        //qDebug()<<query_auth.exec("insert into public.user_tokens(user_id, token) values (3, 'laskdj')");
+        return token_16;
     };
 }
 
@@ -41,7 +57,7 @@ QString ServerFunctions::reg(QStringList reg_list){
         qDebug()<<query_reg.value(username_Index).toString()
                <<"\t"<<query_reg.value(password_Index).toString()<<"\n";
 
-    return "register success";
+    return auth(reg_list);
 }
 
 QString ServerFunctions::parse(QString query)
