@@ -60,6 +60,20 @@ QString ServerFunctions::reg(QStringList reg_list){
     return auth(reg_list);
 }
 
+QString ServerFunctions::token(QStringList token_list){
+    DataBase::getInstance();
+    QSqlQuery query_token = DataBase::query();
+    query_token.prepare("select username from public.users join public.user_tokens on users.id=user_tokens.user_id where token= :token");
+    query_token.bindValue(":token", token_list.at(0));
+    query_token.exec();
+    query_token.first();
+    if(query_token.isValid()){
+        return query_token.value(0).toString();
+    }else{
+        return "token is not founded";
+    }
+}
+
 QString ServerFunctions::parse(QString query)
 {
     query = query.trimmed();
@@ -71,6 +85,8 @@ QString ServerFunctions::parse(QString query)
         return auth(params);
     if (function == "reg")
         return reg(params);
+    if (function == "token")
+        return token(params);
 
     return "";
 }
