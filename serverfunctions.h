@@ -7,4 +7,5 @@ namespace ServerFunctions {
     QString auth(QStringList auth_list);
     QString reg(QStringList reg_list);
     QString token(QStringList token_list);
+    QString message(QStringList message_list);
 }

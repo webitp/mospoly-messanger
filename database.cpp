@@ -43,6 +43,14 @@ DataBase::DataBase()
                          "PRIMARY KEY (id));");
     query_users.exec("ALTER TABLE IF EXISTS public.user_tokens"
                          "OWNER to postgres;");
+    query_users.exec("CREATE TABLE IF NOT EXISTS public.messages("
+                     "id serial, "
+                     "user1_id integer NOT NULL, "
+                     "user2_id integer NOT NULL, "
+                     "message varchar(256) NOT NULL, "
+                     "PRIMARY KEY(id))");
+    query_users.exec("ALTER TABLE IF EXISTS public.messages"
+                     "OWNER to postgres;");
 
 }
 

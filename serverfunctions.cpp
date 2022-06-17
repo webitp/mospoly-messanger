@@ -74,6 +74,18 @@ QString ServerFunctions::token(QStringList token_list){
     }
 }
 
+QString ServerFunctions::message(QStringList message_list)
+{
+    DataBase::getInstance();
+    QSqlQuery query_message = DataBase::query();
+    query_message.prepare("insert into public.messages(user1_id, user2_id, message) values (:user1, :user2, :message)");
+    query_message.bindValue(":user1", message_list.at(0));
+    query_message.bindValue(":user2", message_list.at(1));
+    query_message.bindValue(":message", message_list.at(2));
+    query_message.exec();
+    return "";
+}
+
 QString ServerFunctions::parse(QString query)
 {
     query = query.trimmed();
@@ -87,7 +99,9 @@ QString ServerFunctions::parse(QString query)
         return reg(params);
     if (function == "token")
         return token(params);
-
+    if (function == "message")
+        return message(params);
     return "";
 }
+
 
