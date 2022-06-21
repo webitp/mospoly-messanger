@@ -24,24 +24,34 @@ DataBase::DataBase()
     }
     QSqlQuery query_users(db);
     query_users.exec("CREATE TABLE IF NOT EXISTS public.users("
-                         "id integer NOT NULL auto increment, "
-                         "password varcar(256), "
+                         "id serial, "
+                         "password varchar(256) NOT NULL, "
                          "phone text COLLATE pg_catalog.\"default\" NOT NULL, "
-                         "username text COLLATE pg_catalog.\"default\", "
+                         "username text COLLATE pg_catalog.\"default\" NOT NULL, "
                          "online boolean DEFAULT false, "
                          "created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
-                         "CONSTRAINT users_pkey PRIMARY KEY (id));"
-                     "ALTER TABLE IF EXISTS public.users"
+                         "CONSTRAINT users_pkey PRIMARY KEY (id));");
+    query_users.exec("ALTER TABLE IF EXISTS public.users"
                          "OWNER to postgres;");
+   // query_users.exec("CREATE TABLE IF NOT EXISTS public.users(id serial,password varchar(256),phone text COLLATE pg_catalog.\"default\" NOT NULL,username text COLLATE pg_catalog.\"default\", online boolean DEFAULT false,created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,CONSTRAINT users_pkey PRIMARY KEY (id));ALTER TABLE IF EXISTS public.users OWNER to postgres;");
     query_users.exec("CREATE TABLE public.user_tokens("
-                         "id integer, "
+                         "id serial, "
                          "user_id integer NOT NULL, "
                          "token text NOT NULL, "
                          "expired_at timestamp with time zone, "
                          "created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
-                         "PRIMARY KEY (id));"
-                     "ALTER TABLE IF EXISTS public.user_tokens"
+                         "PRIMARY KEY (id));");
+    query_users.exec("ALTER TABLE IF EXISTS public.user_tokens"
                          "OWNER to postgres;");
+    query_users.exec("CREATE TABLE IF NOT EXISTS public.messages("
+                     "id serial, "
+                     "user1_id integer NOT NULL, "
+                     "user2_id integer NOT NULL, "
+                     "message varchar(256) NOT NULL, "
+                     "created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
+                     "PRIMARY KEY(id))");
+    query_users.exec("ALTER TABLE IF EXISTS public.messages"
+                     "OWNER to postgres;");
 
 }
 
