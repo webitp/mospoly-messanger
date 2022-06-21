@@ -6,7 +6,7 @@
 #include <QSqlRecord>
 #include <QDateTime>
 #include <QJsonObject>
-#include <QJsonDocument>>
+#include <QJsonDocument>
 #include <QDebug>
 
 
@@ -112,13 +112,9 @@ QString ServerFunctions::history(QStringList history_list)
         cnt=0;
         QJsonObject jsonObj_mes;
         jsonObj_mes.insert("user1_id", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
-        qDebug()<<history_query.value(cnt-1).toString();
         jsonObj_mes.insert("user2_id", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
-        qDebug()<<history_query.value(cnt-1).toString();
         jsonObj_mes.insert("created_at", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
-        qDebug()<<history_query.value(cnt-1).toString();
         jsonObj_mes.insert("message", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
-        qDebug()<<history_query.value(cnt-1).toString();
         QString count_mes = QString::number(cnt_mes++);
         jsonObj.insert("message " + count_mes, jsonObj_mes);
     }
