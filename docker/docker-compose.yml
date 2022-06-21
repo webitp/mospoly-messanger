@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  db:
+    container_name: db
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./db/.env
+
+  server:
+    container_name: server
+    build: ./server
+    ports:
+      - "33333:33333"
+    volumes:
+      - ../server:/usr/share/server
+    command: "qmake mospolymessenger.pro && make && ./mospolymessenger"
+    entrypoint: ./mospolymessenger
