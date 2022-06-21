@@ -48,6 +48,7 @@ DataBase::DataBase()
                      "user1_id integer NOT NULL, "
                      "user2_id integer NOT NULL, "
                      "message varchar(256) NOT NULL, "
+                     "created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
                      "PRIMARY KEY(id))");
     query_users.exec("ALTER TABLE IF EXISTS public.messages"
                      "OWNER to postgres;");

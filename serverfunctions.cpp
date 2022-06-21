@@ -5,6 +5,9 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QDateTime>
+#include <QJsonObject>
+#include <QJsonDocument>>
+#include <QDebug>
 
 
 QString ServerFunctions::auth(QStringList auth_list){
@@ -60,15 +63,24 @@ QString ServerFunctions::reg(QStringList reg_list){
     return auth(reg_list);
 }
 
-QString ServerFunctions::token(QStringList token_list){
+QString ServerFunctions::authentication(QStringList authentication_list){
     DataBase::getInstance();
-    QSqlQuery query_token = DataBase::query();
-    query_token.prepare("select username from public.users join public.user_tokens on users.id=user_tokens.user_id where token= :token");
-    query_token.bindValue(":token", token_list.at(0));
-    query_token.exec();
-    query_token.first();
-    if(query_token.isValid()){
-        return query_token.value(0).toString();
+    QSqlQuery query_authentication = DataBase::query();
+    query_authentication.prepare("select users.id, username, phone from public.users join public.user_tokens on users.id=user_tokens.user_id where token= :token");
+    query_authentication.bindValue(":token", authentication_list.at(0));
+    query_authentication.exec();
+    query_authentication.first();
+    QSqlRecord authen_rec = query_authentication.record();
+
+    if(query_authentication.isValid()){
+        QJsonObject data;
+        data.insert("user_id", QJsonValue::fromVariant(query_authentication.value(0).toString()));
+        data.insert("username", QJsonValue::fromVariant(query_authentication.value(1).toString()));
+        data.insert("phone", QJsonValue::fromVariant(query_authentication.value(2).toString()));
+        QJsonDocument doc(data);
+        QString jsonString = doc.toJson(QJsonDocument::Indented);
+     // qDebug()<<jsonString;
+        return jsonString;
     }else{
         return "token is not founded";
     }
@@ -85,6 +97,35 @@ QString ServerFunctions::message(QStringList message_list)
     query_message.exec();
     return "";
 }
+QString ServerFunctions::history(QStringList history_list)
+{
+    QJsonObject jsonObj;
+    QSqlQuery history_query = DataBase::query();
+    history_query.prepare("select user1_id, user2_id, created_at, message from messages where (user1_id= :us1_id or user1_id= :us2_id) and (user2_id=:us1_id or user2_id=:us2_id) order by created_at");
+    history_query.bindValue(":us1_id", history_list.at(0));
+    history_query.bindValue(":us2_id", history_list.at(1));
+    history_query.exec();
+    int cnt_mes=1;
+    int cnt =0;
+    while (history_query.next())
+    {
+        cnt=0;
+        QJsonObject jsonObj_mes;
+        jsonObj_mes.insert("user1_id", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
+        qDebug()<<history_query.value(cnt-1).toString();
+        jsonObj_mes.insert("user2_id", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
+        qDebug()<<history_query.value(cnt-1).toString();
+        jsonObj_mes.insert("created_at", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
+        qDebug()<<history_query.value(cnt-1).toString();
+        jsonObj_mes.insert("message", QJsonValue::fromVariant(history_query.value(cnt++).toString()));
+        qDebug()<<history_query.value(cnt-1).toString();
+        QString count_mes = QString::number(cnt_mes++);
+        jsonObj.insert("message " + count_mes, jsonObj_mes);
+    }
+    QJsonDocument doc(jsonObj);
+    QString jsonString = doc.toJson(QJsonDocument::Indented);
+    return jsonString;
+}
 
 QString ServerFunctions::parse(QString query)
 {
@@ -97,10 +138,12 @@ QString ServerFunctions::parse(QString query)
         return auth(params);
     if (function == "reg")
         return reg(params);
-    if (function == "token")
-        return token(params);
+    if (function == "authentication")
+        return authentication(params);
     if (function == "message")
         return message(params);
+    if (function == "history")
+        return history(params);
     return "";
 }
 
