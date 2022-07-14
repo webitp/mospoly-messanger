@@ -95,7 +95,7 @@ QString ServerFunctions::message(QStringList message_list)
     query_message.bindValue(":user2", message_list.at(1));
     query_message.bindValue(":message", message_list.at(2));
     query_message.exec();
-    return "";
+    return "message is added";
 }
 QString ServerFunctions::history(QStringList history_list)
 {
